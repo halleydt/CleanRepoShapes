@@ -1,44 +1,25 @@
 package PackOfShapes;
 
-import org.junit.Test;
+import org.junit.Assert;
+import org.junit.*;
 
-import static org.junit.Assert.*;
+import java.io.IOException;
 
 public class ShapesTest extends Serialization {
 
     @Test
-    public void getSize() {
+    public void testEquals() throws Exception {
+        Shapes first = new Shapes("red", 1);
+        Shapes second = new Shapes("red", 1);
+        Assert.assertEquals(first, second);
     }
 
     @Test
-    public void getColor() {
-    }
-
-    @Test
-    public void setSize() {
-    }
-
-    @Test
-    public void setColor() {
-    }
-
-    @Test
-    public void testEquals() {
-    }
-
-    @Test
-    public void serializeToXML() {
-    }
-
-    @Test
-    public void deserializeFromXML() {
-    }
-
-    @Test
-    public void testSerialize() {
-    }
-
-    @Test
-    public void testDeserialize() {
+    public void testXMLSerialization() throws IOException {
+        Shapes first = new Shapes("red", 1);
+        Shapes second = new Shapes("red", 1);
+        Shapes.serializeToXML(second, "shape.xml");
+        Shapes XMLShape = Shapes.deserializeFromXML("shape.xml");
+        Assert.assertTrue(first.equals(second));
     }
 }

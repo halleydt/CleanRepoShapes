@@ -5,7 +5,7 @@
    <string>red</string>
   </void>
   <void property="size">
-   <int>5</int>
+   <int>1</int>
   </void>
  </object>
 </java>
