@@ -4,6 +4,10 @@ import java.beans.ExceptionListener;
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class Shapes implements Serializable {
@@ -68,26 +72,30 @@ public class Shapes implements Serializable {
         fis.close();
         return decodedObj;
     }
-    public static void serialize(Shapes person, String fileAddress) {
-        String CSVString = "";
-        try {
-            PrintWriter outFile = new PrintWriter(new FileOutputStream(fileAddress));
-            outFile.println(person.getColor() + "," + person.getSize());
-            outFile.flush();
-            outFile.close();
+    public static void serialize(Shapes person, String fileAddress) { //uses charset to serialize with csv
+
+        Path path = Paths.get(fileAddress);
+        try(BufferedWriter writer = Files.newBufferedWriter(path, Charset.forName("UTF-8"))){
+            writer.write(person.getColor() + "," + person.getSize());
+        }catch(IOException ex){
+            ex.printStackTrace();
         }
         catch (Exception e) {
             System.out.println("We got a problem. \n" + e);
         }
     }
 
-    public static Shapes deserialize(String fileAddress) {
+    public static Shapes deserialize(String fileAddress) { //uses charset to deserialize with csv
         Shapes temp = null;
-        try {
-            Scanner fileInput = new Scanner(new FileInputStream(fileAddress));
-            String inputLine = fileInput.nextLine();
-            String [] line = inputLine.split(",");
+        Path path = Paths.get(fileAddress);
+        try(BufferedReader reader = Files.newBufferedReader(path, Charset.forName("UTF-8"))){
+
+            String currentLine = reader.readLine();
+            String [] line = currentLine.split(",");
             temp = new Shapes(line[0], Integer.parseInt(line[1]));
+
+        }catch(IOException ex){
+            ex.printStackTrace();
         }
         catch (Exception e) {
             System.out.println("We got a problem. \n" + e);
